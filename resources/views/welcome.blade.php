@@ -21,23 +21,31 @@ Create Story
 
 @foreach($stories as $story)
 
-<div class="bg-white shadow rounded p-6 mt-6">
+<div class="bg-white/70 dark:bg-gray-800/70 backdrop-blur-md shadow-lg rounded-2xl p-6 mt-6 border border-gray-200 dark:border-gray-700 hover:scale-105 transition duration-300">
 
-<p class="text-lg font-bold">
+
+<p class="text-lg font-semibold text-gray-900 dark:text-gray-100">
 {{ $story->content }}
 </p>
 
-<p class="text-gray-600">
-Target: {{ $story->target_amount }}
+<p class="text-sm text-gray-500 dark:text-gray-400 mt-2">
+🎯 Target: <span class="font-medium text-gray-800 dark:text-gray-200">
+{{ $story->target_amount }} €
+</span>
 </p>
 
-<p class="text-gray-600">
-Collected: {{ $story->collected_amount }}
+<p class="text-sm text-gray-500 dark:text-gray-400 mt-2">
+💰 Collected: <span class="font-medium text-green-600">
+{{ $story->collected_amount }} €
+</span>
 </p>
 
-<p class="text-red-500">
-❤️ Likes: {{ $story->likes->count() }}
+<p class="text-sm text-gray-700 dark:text-gray-400 mt-2">
+❤️ <span class="text-pink-500 font-semibold">
+{{ $story->likes->count() }}
+</span> likes
 </p>
+
 
 @auth
 <form action="/like/{{$story->id}}" method="POST" class="mt-2">
