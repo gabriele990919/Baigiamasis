@@ -7,39 +7,60 @@ use App\Models\Story;
 
 class StoryController extends Controller
 {
+    // 🔹 Rodo visas stories
+    public function index()
+    {
+        $stories = Story::with('likes')->get();
 
-  public function index()
-{
-    $stories = Story::all();
+        return view('welcome', compact('stories'));
+    }
 
-    return view('welcome', compact('stories'));
-}
-
+    // 🔹 Create puslapis
     public function create()
     {
         return view('story.create');
     }
 
-    public function store(Request $request)
-    {
+    // 🔹 STORE (SU IMAGE UPLOAD 🔥)
+public function store(Request $request)
+{
+    $request->validate([
+        'content' => 'required',
+        'target_amount' => 'required|integer|min:1',
+        'image' => 'nullable|image|mimes:jpg,jpeg,png|max:2048'
+    ]);
 
-        Story::create([
-            'content' => $request->content,
-            'target_amount' => $request->target_amount,
-            'user_id' => auth()->id()
-        ]);
+    $path = null;
 
-        return redirect('/');
+    if ($request->hasFile('image')) {
+        $path = $request->file('image')->store('stories', 'public');
     }
 
-    public function destroy($id)
-{
-    $story = Story::findOrFail($id);
-
-    $story->delete();
+    \App\Models\Story::create([
+        'content' => $request->content,
+        'target_amount' => $request->target_amount,
+        'collected_amount' => 0,
+        'user_id' => auth()->id(),
+        'main_image' => $path
+    ]);
 
     return redirect('/');
 }
 
 
+    // 🔹 DELETE
+    public function destroy($id)
+    {
+        $story = Story::findOrFail($id);
+
+        // (optional) ištrina ir paveikslą
+        if ($story->main_image) {
+            \Storage::disk('public')->delete($story->main_image);
+        }
+
+        $story->delete();
+
+        return redirect('/');
+    }
 }
+
