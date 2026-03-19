@@ -19,6 +19,9 @@
     @endif
 
     {{-- CONTENT --}}
+
+    <p>{{ $story->main_image }}</p>
+
     <p class="text-lg font-semibold text-gray-900 dark:text-gray-100">
         {{ $story->content }}
     </p>
