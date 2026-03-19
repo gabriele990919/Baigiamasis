@@ -33,10 +33,14 @@ public function store(Request $request)
     $path = null;
 
     if ($request->hasFile('image')) {
+
+        // DEBUG
+        dd('File exists'); // 👈 pažiūrėk ar čia ateina
+
         $path = $request->file('image')->store('stories', 'public');
     }
 
-    \App\Models\Story::create([
+    Story::create([
         'content' => $request->content,
         'target_amount' => $request->target_amount,
         'collected_amount' => 0,
