@@ -22,35 +22,30 @@ class StoryController extends Controller
     }
 
     // 🔹 STORE (SU IMAGE UPLOAD 🔥)
-public function store(Request $request)
-{
-    $request->validate([
-        'content' => 'required',
-        'target_amount' => 'required|integer|min:1',
-        'image' => 'nullable|image|mimes:jpg,jpeg,png|max:2048'
-    ]);
+    public function store(Request $request)
+    {
+        $request->validate([
+            'content' => 'required',
+            'target_amount' => 'required|integer|min:1',
+            'image' => 'nullable|image|mimes:jpg,jpeg,png|max:2048'
+        ]);
 
-    $path = null;
+        $path = null;
 
-    if ($request->hasFile('image')) {
+        if ($request->hasFile('image')) {
+            $path = $request->file('image')->store('stories', 'public');
+        }
 
-        // DEBUG
-        dd('File exists'); // 👈 pažiūrėk ar čia ateina
+        Story::create([
+            'content' => $request->content,
+            'target_amount' => $request->target_amount,
+            'collected_amount' => 0,
+            'user_id' => auth()->id(),
+            'main_image' => $path
+        ]);
 
-        $path = $request->file('image')->store('stories', 'public');
+        return redirect('/');
     }
-
-    Story::create([
-        'content' => $request->content,
-        'target_amount' => $request->target_amount,
-        'collected_amount' => 0,
-        'user_id' => auth()->id(),
-        'main_image' => $path
-    ]);
-
-    return redirect('/');
-}
-
 
     // 🔹 DELETE
     public function destroy($id)

@@ -14,11 +14,13 @@ class Story extends Model
 {
     use HasFactory;
 
-    protected $fillable = [
-        'content',
-        'target_amount',
-        'user_id'
-    ];
+   protected $fillable = [
+    'content',
+    'target_amount',
+    'user_id',
+    'main_image',
+    'collected_amount'
+];
 
     public function images()
     {
