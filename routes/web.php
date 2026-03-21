@@ -3,6 +3,7 @@
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\StoryController;
 use App\Http\Controllers\LikeController;
+use App\Http\Controllers\DonationController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [StoryController::class,'index']);
@@ -15,6 +16,7 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/create', [StoryController::class,'create']);
     Route::post('/store', [StoryController::class,'store']);
+    Route::post('/donate/{story_id}', [DonationController::class,'store']);
     Route::delete('/story/{id}', [StoryController::class,'destroy']);
     Route::post('/like/{story_id}', [LikeController::class,'store']);
 

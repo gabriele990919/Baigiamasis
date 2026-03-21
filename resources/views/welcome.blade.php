@@ -43,6 +43,22 @@
                 💰 Collected: {{ $story->collected_amount }} €
             </p>
 
+            @php
+            $percent = $story->target_amount > 0 
+            ? ($story->collected_amount / $story->target_amount) * 100 
+            : 0;
+            @endphp
+
+            <div class="w-full bg-gray-300 rounded-full h-3 mt-2">
+            <div class="bg-green-500 h-3 rounded-full transition-all duration-500"
+            style="width: {{ min($percent,100) }}%">
+            </div>
+            </div>
+
+            <p class="text-xs text-gray-500 mt-1">
+            {{ round($percent) }}% funded
+            </p>
+
             {{-- LIKES --}}
             <p class="text-sm text-pink-500 mt-2">
                 ❤️ {{ $story->likes->count() }} likes
@@ -54,6 +70,17 @@
                 <button class="text-pink-500 hover:scale-110 transition">
                     ❤️ Like
                 </button>
+            </form>
+            
+            <form action="/donate/{{$story->id}}" method="POST" class="mt-3 flex gap-2">
+            @csrf
+
+            <input type="number" name="amount" placeholder="€"
+            class="w-20 p-2 rounded-lg text-black">
+
+            <button class="bg-green-500 hover:bg-green-600 text-white px-3 py-1 rounded-lg">
+            Donate
+            </button>
             </form>
 
             {{-- DELETE --}}
