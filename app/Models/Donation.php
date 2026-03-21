@@ -7,22 +7,16 @@ use Illuminate\Database\Eloquent\Model;
 
 class Donation extends Model
 {
-    use HasFactory;
-
     protected $fillable = [
-        'story_id',
         'user_id',
+        'story_id',
         'amount'
     ];
 
-    public function story()
-    {
-        return $this->belongsTo(Story::class);
-    }
-
-    public function user()
-    {
-        return $this->belongsTo(User::class);
-    }
+public function donations()
+{
+    return $this->hasMany(Donation::class);
 }
 
+    use HasFactory;
+}

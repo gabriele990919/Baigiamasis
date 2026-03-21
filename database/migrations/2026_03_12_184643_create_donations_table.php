@@ -7,12 +7,12 @@ use Illuminate\Support\Facades\Schema;
 return new class extends Migration
 {
   
-public function up(): void
+public function up()
 {
     Schema::create('donations', function (Blueprint $table) {
         $table->id();
-        $table->foreignId('story_id')->constrained()->cascadeOnDelete();
         $table->foreignId('user_id')->constrained()->cascadeOnDelete();
+        $table->foreignId('story_id')->constrained()->cascadeOnDelete();
         $table->integer('amount');
         $table->timestamps();
     });
