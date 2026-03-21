@@ -14,6 +14,13 @@ class DonationController extends Controller
             'amount' => 'required|integer|min:1'
         ]);
 
+        $story = \App\Models\Story::findOrFail($story_id);
+
+        // ❌ negali donate sau
+        if ($story->user_id == auth()->id()) {
+        return back()->with('error', 'You cannot donate to your own story');
+        }
+
         // sukuriam donation
         Donation::create([
             'user_id' => auth()->id(),

@@ -13,10 +13,13 @@ class Donation extends Model
         'amount'
     ];
 
-public function donations()
-{
-    return $this->hasMany(Donation::class);
-}
+    public function story()
+    {
+        return $this->belongsTo(Story::class);
+    }
 
-    use HasFactory;
+    public function user()
+    {
+        return $this->belongsTo(\App\Models\User::class);
+    }
 }

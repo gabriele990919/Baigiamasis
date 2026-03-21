@@ -55,6 +55,20 @@
             </div>
             </div>
 
+            @if($story->donations->count() > 0)
+
+            <div class="mt-3 text-sm text-gray-400">
+            <p class="font-semibold mb-1">Donors:</p>
+
+            @foreach($story->donations->take(3) as $donation)
+            <p>
+            💸 {{ $donation->user->name }} - {{ $donation->amount }}€
+            </p>
+            @endforeach
+            </div>
+            @endif
+
+
             <p class="text-xs text-gray-500 mt-1">
             {{ round($percent) }}% funded
             </p>

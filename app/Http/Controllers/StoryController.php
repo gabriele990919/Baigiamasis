@@ -10,7 +10,7 @@ class StoryController extends Controller
     // 🔹 Rodo visas stories
     public function index()
     {
-        $stories = Story::with('likes')->get();
+        $stories = Story::with(['likes','donations.user'])->get();
 
         return view('welcome', compact('stories'));
     }
