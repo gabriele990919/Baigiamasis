@@ -4,18 +4,18 @@
     <meta charset="UTF-8">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>Story App</title>
-   @vite(['resources/css/app.css', 'resources/js/app.js'])
 
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 
 <body class="bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-gray-100">
-    @include('layouts.navigation')
+
+@include('layouts.navigation')
 
 <div class="max-w-5xl mx-auto p-6">
 
     <!-- NAV -->
     <div class="flex justify-between items-center mb-6">
-
         <a href="/" class="text-xl font-bold">Galerija</a>
 
         <div>
@@ -29,7 +29,6 @@
                 <a href="{{ route('register') }}">Register</a>
             @endauth
         </div>
-
     </div>
 
     <!-- CONTENT -->
@@ -37,8 +36,10 @@
 
 </div>
 
-</script>
+<!-- Alpine -->
+<script src="//unpkg.com/alpinejs" defer></script>
 
+<!-- 🎉 CONFETTI ANIMATION -->
 <style>
 @keyframes fall {
     to {
@@ -48,10 +49,9 @@
 }
 </style>
 
-<script src="//unpkg.com/alpinejs" defer></script>
-
+<!-- 💳 PAYMENT LOGIC -->
 <script>
-function paymentModal() {
+window.paymentModal = function() {
     return {
         open: false,
         storyId: null,
@@ -59,46 +59,43 @@ function paymentModal() {
         amount: null,
 
         pay() {
-    if (!this.amount || this.amount <= 0) {
-        alert('Įvesk sumą 😄');
-        return;
-    }
-
-    this.step = 'loading';
-
-    setTimeout(() => {
-        fetch('/donate/' + this.storyId, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-            },
-            body: JSON.stringify({
-                amount: this.amount
-            })
-        })
-        .then(res => res.json())
-        .then(data => {
-
-            // ❌ jei error iš backend
-            if (data.error) {
-                alert(data.error);
-                this.step = 'form';
+            if (!this.amount || this.amount <= 0) {
+                alert('Įvesk sumą 😄');
                 return;
             }
 
-            // ✅ success
-            this.step = 'success';
-            this.confetti();
-        })
-        .catch(() => {
-            alert('Kažkas nepavyko 😢');
-            this.step = 'form';
-        });
+            this.step = 'loading';
 
-    }, 800);
-}
+            setTimeout(() => {
+                fetch('/donate/' + this.storyId, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                    },
+                    body: JSON.stringify({
+                        amount: this.amount
+                    })
+                })
+                .then(res => res.json())
+                .then(data => {
 
+                    if (data.error) {
+                        alert(data.error);
+                        this.step = 'form';
+                        return;
+                    }
+
+                    this.step = 'success';
+                    this.confetti();
+                })
+                .catch(() => {
+                    alert('Kažkas nepavyko 😢');
+                    this.step = 'form';
+                });
+
+            }, 800);
+        },
 
         finish() {
             this.open = false;
@@ -128,7 +125,6 @@ function paymentModal() {
         }
     }
 }
-
 </script>
 
 </body>
