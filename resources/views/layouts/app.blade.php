@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>Story App</title>
    @vite(['resources/css/app.css', 'resources/js/app.js'])
 
@@ -35,6 +36,100 @@
     {{ $slot }}
 
 </div>
+
+</script>
+
+<style>
+@keyframes fall {
+    to {
+        transform: translateY(100vh);
+        opacity: 0;
+    }
+}
+</style>
+
+<script src="//unpkg.com/alpinejs" defer></script>
+
+<script>
+function paymentModal() {
+    return {
+        open: false,
+        storyId: null,
+        step: 'form',
+        amount: null,
+
+        pay() {
+    if (!this.amount || this.amount <= 0) {
+        alert('Įvesk sumą 😄');
+        return;
+    }
+
+    this.step = 'loading';
+
+    setTimeout(() => {
+        fetch('/donate/' + this.storyId, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+            },
+            body: JSON.stringify({
+                amount: this.amount
+            })
+        })
+        .then(res => res.json())
+        .then(data => {
+
+            // ❌ jei error iš backend
+            if (data.error) {
+                alert(data.error);
+                this.step = 'form';
+                return;
+            }
+
+            // ✅ success
+            this.step = 'success';
+            this.confetti();
+        })
+        .catch(() => {
+            alert('Kažkas nepavyko 😢');
+            this.step = 'form';
+        });
+
+    }, 800);
+}
+
+
+        finish() {
+            this.open = false;
+            this.step = 'form';
+            window.location.reload();
+        },
+
+        confetti() {
+            const duration = 1500;
+            const end = Date.now() + duration;
+
+            const interval = setInterval(() => {
+                if (Date.now() > end) return clearInterval(interval);
+
+                const el = document.createElement('div');
+                el.innerHTML = "🎉";
+                el.style.position = 'fixed';
+                el.style.left = Math.random() * 100 + 'vw';
+                el.style.top = '-10px';
+                el.style.fontSize = '20px';
+                el.style.animation = 'fall 1.5s linear';
+
+                document.body.appendChild(el);
+                setTimeout(() => el.remove(), 1500);
+
+            }, 100);
+        }
+    }
+}
+
+</script>
 
 </body>
 </html>

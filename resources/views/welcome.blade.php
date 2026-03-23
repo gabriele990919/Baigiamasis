@@ -1,6 +1,6 @@
 <x-app-layout>
 
-<div x-data="{ open: false, storyId: null }" class="max-w-7xl mx-auto p-6">
+<div x-data="paymentModal()" class="max-w-7xl mx-auto p-6">
 
     {{-- HEADER --}}
     <div class="flex justify-between items-center mb-6">
@@ -49,7 +49,7 @@
             : 0;
             @endphp
 
-            {{-- PROGRESS BAR --}}
+            {{-- PROGRESS --}}
             <div class="w-full bg-gray-300 rounded-full h-3 mt-2">
                 <div class="bg-green-500 h-3 rounded-full transition-all duration-500"
                 style="width: {{ min($percent,100) }}%">
@@ -86,7 +86,7 @@
                 </button>
             </form>
 
-            {{-- DONATE BUTTON --}}
+            {{-- DONATE --}}
             <button 
                 @click="open = true; storyId = {{ $story->id }}"
                 class="mt-3 bg-green-500 hover:bg-green-600 text-white px-3 py-1 rounded-lg">
@@ -110,46 +110,71 @@
 
     </div>
 
-    {{-- 🔥 FAKE STRIPE MODAL --}}
+    {{-- 🔥 MODAL (TIK VIENAS!) --}}
     <div 
         x-show="open"
         x-transition
         style="display: none;"
         class="fixed inset-0 flex items-center justify-center bg-black/50 z-50">
 
-        <div class="bg-white rounded-2xl p-6 w-96 shadow-xl"
+        <div class="bg-white rounded-2xl p-6 w-96 shadow-xl text-center"
              @click.outside="open = false">
 
-            <h2 class="text-xl font-bold mb-4">💳 Payment</h2>
+            {{-- FORM --}}
+            <template x-if="step === 'form'">
+                <div>
+                    <h2 class="text-xl font-bold mb-4">💳 Payment</h2>
 
-            <form :action="'/donate/' + storyId" method="POST" class="space-y-3">
-                @csrf
+                    <input type="number" x-model="amount" placeholder="Amount (€)"
+                        class="w-full p-2 border rounded text-black mb-2">
 
-                <input type="number" name="amount" placeholder="Amount (€)"
-                    class="w-full p-2 border rounded text-black" required>
+                    <input type="text" placeholder="Card number"
+                        class="w-full p-2 border rounded text-black mb-2">
 
-                <input type="text" placeholder="Card number"
-                    class="w-full p-2 border rounded text-black" required>
+                    <div class="flex gap-2 mb-3">
+                        <input type="text" placeholder="MM/YY"
+                            class="w-1/2 p-2 border rounded text-black">
 
-                <div class="flex gap-2">
-                    <input type="text" placeholder="MM/YY"
-                        class="w-1/2 p-2 border rounded text-black" required>
+                        <input type="text" placeholder="CVC"
+                            class="w-1/2 p-2 border rounded text-black">
+                    </div>
 
-                    <input type="text" placeholder="CVC"
-                        class="w-1/2 p-2 border rounded text-black" required>
+                    <button 
+                        @click="pay()"
+                        class="w-full bg-green-500 text-white py-2 rounded hover:bg-green-600">
+                        Pay
+                    </button>
+
+                    <button type="button" 
+                        @click="open = false"
+                        class="w-full text-gray-500 mt-2">
+                        Cancel
+                    </button>
                 </div>
+            </template>
 
-                <button class="w-full bg-green-500 text-white py-2 rounded hover:bg-green-600">
-                    Pay
-                </button>
+            {{-- LOADING --}}
+            <template x-if="step === 'loading'">
+                <div>
+                    <div class="animate-spin rounded-full h-12 w-12 border-4 border-blue-500 border-t-transparent mx-auto mb-4"></div>
+                    <p class="text-lg font-semibold">Processing payment...</p>
+                </div>
+            </template>
 
-                <button type="button" 
-                    @click="open = false"
-                    class="w-full text-gray-500 mt-2">
-                    Cancel
-                </button>
+            {{-- SUCCESS --}}
+            <template x-if="step === 'success'">
+                <div>
+                    <div class="text-4xl mb-2">✅</div>
+                    <h2 class="text-xl font-bold">Payment successful!</h2>
+                    <p class="text-gray-500 mt-2">Thank you for your donation 🎉</p>
 
-            </form>
+                    <button 
+                        @click="finish()"
+                        class="mt-4 bg-blue-500 text-white px-4 py-2 rounded">
+                        Close
+                    </button>
+                </div>
+            </template>
 
         </div>
 
@@ -158,7 +183,6 @@
 </div>
 
 </x-app-layout>
-
 
 
 
