@@ -93,25 +93,26 @@
          style="display:none"
          class="fixed inset-0 flex items-center justify-center bg-black/50">
 
-        <div class="bg-white p-6 rounded-xl w-96 text-center"
+        <div class="bg-gray-900/90 backdrop-blur-lg p-6 rounded-2xl w-96 text-center border border-white/10 shadow-2xl"
+
              @click.outside="open = false">
 
             <!-- FORM -->
             <template x-if="step === 'form'">
                 <div>
-                    <h2 class="text-xl mb-4">💳 Payment</h2>
+                    <h2 class="text-xl mb-4 text-white">💳 Payment</h2>
 
                     <input type="number" x-model="amount"
                            placeholder="Amount (€)"
-                           class="w-full p-2 border mb-2">
+                           class="w-full p-2 mb-3 rounded-lg bg-gray-800 text-white border border-gray-600 focus:outline-none focus:ring-2 focus:ring-green-500">
 
                     <button @click="pay()"
-                            class="w-full bg-green-500 text-white py-2 rounded">
+                            class="w-full bg-green-500 hover:bg-green-600 text-white py-2 rounded-lg shadow-lg transition">
                         Pay
                     </button>
 
                     <button @click="open = false"
-                            class="mt-2 text-gray-500">
+                            class="mt-3 text-gray-400 hover:text-white transition">
                         Cancel
                     </button>
                 </div>
