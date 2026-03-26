@@ -19,6 +19,7 @@ Route::middleware('auth')->group(function () {
     Route::post('/donate/{story_id}', [DonationController::class,'store']);
     Route::delete('/story/{id}', [StoryController::class,'destroy']);
     Route::post('/like/{story_id}', [LikeController::class,'store']);
+    Route::post('/approve/{id}', [StoryController::class, 'approve']);
 
 });
 

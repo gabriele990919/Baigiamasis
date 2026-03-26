@@ -81,6 +81,25 @@
                 </button>
             </form>
 
+            @if(!$story->is_approved)
+            <p class="text-red-500 text-sm mt-2">
+            NOT APPROVED
+            </p>
+            @endif
+
+            @auth
+            @if(auth()->user()->role === 'admin' && !$story->is_approved)
+
+            <form action="/approve/{{$story->id}}" method="POST" class="mt-2">
+            @csrf
+    <button class="text-blue-500 hover:text-blue-700 text-sm">
+        Approve
+    </button>
+</form>
+
+@endif
+@endauth
+
         </div>
 
         @endforeach

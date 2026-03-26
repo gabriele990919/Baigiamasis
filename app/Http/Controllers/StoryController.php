@@ -67,5 +67,19 @@ public function index()
     return back();
 
     }
+
+    public function approve($id)
+{
+    $story = Story::findOrFail($id);
+
+    if(auth()->user()->role !== 'admin'){
+        abort(403);
+    }
+
+    $story->is_approved = true;
+    $story->save();
+
+    return back();
+}
 }
 
