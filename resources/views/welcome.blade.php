@@ -4,6 +4,20 @@
 
     <div class="flex justify-between items-center mb-6">
         <h1 class="text-3xl font-bold">Stories</h1>
+        <form method="GET" class="mb-4 flex gap-2">
+
+        <select name="filter" class="text-black p-2 rounded">
+        <option value="">Default</option>
+        <option value="likes">Most liked</option>
+        <option value="money">Most funded</option>
+        <option value="new">Newest</option>
+        </select>
+
+<button class="bg-blue-500 text-white px-3 rounded">
+    Filter
+</button>
+
+</form>
 
         <a href="/create"
         class="bg-blue-500 text-white px-4 py-2 rounded-xl">

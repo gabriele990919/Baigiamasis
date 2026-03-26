@@ -10,16 +10,31 @@ class StoryController extends Controller
     // 🔹 Rodo visas stories
 public function index()
 {
-    if(auth()->check() && auth()->user()->role === 'admin'){
-        $stories = Story::with(['likes','donations.user'])->get();
-    } else {
-        $stories = Story::where('is_approved', true)
-            ->with(['likes','donations.user'])
-            ->get();
+    $query = Story::query();
+
+    // 👑 admin mato viską
+    if(!(auth()->check() && auth()->user()->role === 'admin')){
+        $query->where('is_approved', true);
     }
+
+    // 🔍 filteriai
+    if(request('filter') == 'likes'){
+        $query->withCount('likes')->orderBy('likes_count','desc');
+    }
+
+    if(request('filter') == 'money'){
+        $query->orderBy('collected_amount','desc');
+    }
+
+    if(request('filter') == 'new'){
+        $query->orderBy('created_at','desc');
+    }
+
+    $stories = $query->with(['likes','donations.user'])->get();
 
     return view('welcome', compact('stories'));
 }
+
     // 🔹 Create puslapis
     public function create()
     {
@@ -39,6 +54,7 @@ public function index()
 
         if ($request->hasFile('image')) {
             $path = $request->file('image')->store('stories', 'public');
+          
         }
 
         Story::create([
