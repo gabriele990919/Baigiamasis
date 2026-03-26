@@ -41,6 +41,18 @@
         hover:file:bg-blue-600">
     </div>
 
+   {{-- HASHTAGS --}}
+<div>
+    <label class="block text-sm text-gray-600 dark:text-gray-300 mb-1">
+        Hashtags
+    </label>
+
+    <input type="text" name="tags" placeholder="#art #design #cool"
+        class="w-full p-2 rounded-xl border border-gray-300 dark:border-gray-700 
+        bg-transparent text-gray-900 dark:text-gray-100 
+        placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-400">
+</div>
+
     {{-- BUTTON --}}
     <button class="w-full bg-blue-500 hover:bg-blue-600 text-white py-2 rounded-xl transition">
         Create

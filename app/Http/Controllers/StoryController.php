@@ -63,7 +63,8 @@ public function index()
             'collected_amount' => 0,
             'user_id' => auth()->id(),
             'main_image' => $path,
-            'is_approved' => false
+            'is_approved' => false,
+            'tags' => $request->tags,
         ]);
 
         return redirect('/');
