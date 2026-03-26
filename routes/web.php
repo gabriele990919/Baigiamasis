@@ -20,6 +20,7 @@ Route::middleware('auth')->group(function () {
     Route::delete('/story/{id}', [StoryController::class,'destroy']);
     Route::post('/like/{story_id}', [LikeController::class,'store']);
     Route::post('/approve/{id}', [StoryController::class, 'approve']);
+    Route::get('/tag/{tag}', [StoryController::class, 'tag']);
 
 });
 

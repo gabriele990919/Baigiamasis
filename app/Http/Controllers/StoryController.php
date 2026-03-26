@@ -98,5 +98,15 @@ public function index()
 
     return back();
 }
+
+public function tag($tag)
+{
+    $stories = Story::where('tags', 'LIKE', "%#$tag%")
+        ->where('is_approved', true)
+        ->with(['likes','donations.user'])
+        ->get();
+
+    return view('welcome', compact('stories'));
+}
 }
 

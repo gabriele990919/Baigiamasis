@@ -42,7 +42,7 @@
             @if($story->tags)
             <div class="mt-2">
             @foreach(preg_split('/[\s,]+/', $story->tags) as $tag)
-            <a href="/tag/{{$tag}}"
+            <a href="/tag/{{ str_replace('#','',$tag) }}"
             class="text-blue-400 text-sm mr-2 hover:underline">
             {{ $tag }}
             </a>
