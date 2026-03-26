@@ -8,13 +8,18 @@ use App\Models\Story;
 class StoryController extends Controller
 {
     // 🔹 Rodo visas stories
-    public function index()
-    {
+public function index()
+{
+    if(auth()->check() && auth()->user()->role === 'admin'){
         $stories = Story::with(['likes','donations.user'])->get();
-
-        return view('welcome', compact('stories'));
+    } else {
+        $stories = Story::where('is_approved', true)
+            ->with(['likes','donations.user'])
+            ->get();
     }
 
+    return view('welcome', compact('stories'));
+}
     // 🔹 Create puslapis
     public function create()
     {
@@ -41,25 +46,26 @@ class StoryController extends Controller
             'target_amount' => $request->target_amount,
             'collected_amount' => 0,
             'user_id' => auth()->id(),
-            'main_image' => $path
+            'main_image' => $path,
+            'is_approved' => false
         ]);
 
         return redirect('/');
     }
 
     // 🔹 DELETE
-    public function destroy($id)
-    {
-        $story = Story::findOrFail($id);
+   public function destroy($id)
+{
+    $story = Story::findOrFail($id);
 
-        // (optional) ištrina ir paveikslą
-        if ($story->main_image) {
-            \Storage::disk('public')->delete($story->main_image);
-        }
+    if(auth()->user()->role !== 'admin'){
+        abort(403);
+    }
 
-        $story->delete();
+    $story->delete();
 
-        return redirect('/');
+    return back();
+
     }
 }
 
