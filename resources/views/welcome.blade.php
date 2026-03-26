@@ -38,6 +38,18 @@
 
             <p class="font-bold">{{ $story->content }}</p>
 
+            {{-- HASHTAGS --}}
+            @if($story->tags)
+            <div class="mt-2">
+            @foreach(preg_split('/[\s,]+/', $story->tags) as $tag)
+            <a href="/tag/{{$tag}}"
+            class="text-blue-400 text-sm mr-2 hover:underline">
+            {{ $tag }}
+            </a>
+            @endforeach
+            </div>
+            @endif
+
            {{-- MONEY --}}
             <p class="text-sm text-gray-600 dark:text-gray-300 mt-2">
                 Target: {{ $story->target_amount }} €

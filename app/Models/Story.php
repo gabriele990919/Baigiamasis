@@ -19,7 +19,8 @@ class Story extends Model
     'target_amount',
     'user_id',
     'main_image',
-    'collected_amount'
+    'collected_amount',
+    'tags'
 ];
 
     public function images()
