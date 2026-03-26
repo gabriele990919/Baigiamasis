@@ -27,7 +27,7 @@
         placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-400">
     </div>
 
-    {{-- IMAGE UPLOAD 🔥 --}}
+    {{-- IMAGE UPLOAD --}}
     <div>
         <label class="block text-sm text-gray-600 dark:text-gray-300 mb-1">
             Upload image
